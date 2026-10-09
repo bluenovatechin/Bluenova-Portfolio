@@ -6,7 +6,8 @@ const url = (path = '') => new URL(path, brand.siteUrl).href;
 const esc = (s) =>
   String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-const sameAs = [brand.instagram, brand.linkedin, brand.mainSite].filter(Boolean);
+const sameAs = [brand.instagram, brand.instagramCreators, brand.facebook, brand.linkedin, brand.mainSite].filter(Boolean);
+const tel = brand.whatsapp ? `+${brand.whatsapp}` : '';
 
 export function structuredData() {
   const org = `${brand.mainSite}#organization`;
@@ -22,7 +23,17 @@ export function structuredData() {
         logo: url('icons/icon-512.png'),
         image: url('og-image.jpg'),
         email: brand.email,
-        ...(brand.whatsapp && { telephone: `+${brand.whatsapp}` }),
+        ...(tel && {
+          telephone: tel,
+          contactPoint: {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            telephone: tel,
+            email: brand.email,
+            areaServed: 'IN',
+            availableLanguage: ['English', 'Gujarati', 'Hindi'],
+          },
+        }),
         description: seo.description,
         address: { '@type': 'PostalAddress', addressRegion: 'Gujarat', addressCountry: 'IN' },
         areaServed: areas.map((name) => ({ '@type': name === 'Gujarat' ? 'State' : 'City', name })),
@@ -191,8 +202,14 @@ ${faqs.map((f) => `- ${f.q} ${f.a}`).join('\n')}
 
 ## Contact
 - Email: ${brand.email}
-- Portfolio: ${brand.siteUrl}
+${tel ? `- Phone / WhatsApp: ${brand.phone} (https://wa.me/${brand.whatsapp})\n` : ''}- Portfolio: ${brand.siteUrl}
 - Main website: ${brand.mainSite}
+
+## Social profiles
+${sameAs
+  .filter((u) => u !== brand.mainSite)
+  .map((u) => `- ${u}`)
+  .join('\n')}
 `;
 }
 

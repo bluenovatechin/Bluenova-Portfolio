@@ -1,4 +1,5 @@
 import { areas, brand } from '../data/site';
+import { telLink, waLink } from '../utils';
 import { Logo } from './Nav';
 
 const year = new Date().getFullYear();
@@ -6,8 +7,11 @@ const year = new Date().getFullYear();
 export default function Footer() {
   const socials = [
     brand.instagram && { label: 'Instagram', href: brand.instagram },
+    brand.instagramCreators && { label: 'Creator Hub (Instagram)', href: brand.instagramCreators },
+    brand.facebook && { label: 'Facebook', href: brand.facebook },
     brand.linkedin && { label: 'LinkedIn', href: brand.linkedin },
   ].filter(Boolean);
+  const wa = waLink('Hi BlueNova, I would like to discuss a project.');
 
   return (
     <footer className="footer">
@@ -38,12 +42,23 @@ export default function Footer() {
             <div>
               <p className="mono">Contact</p>
               <a href={`mailto:${brand.email}`}>{brand.email}</a>
-              {socials.map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noreferrer">
-                  {s.label}
+              <a href={telLink()}>{brand.phone}</a>
+              {wa && (
+                <a href={wa} target="_blank" rel="noreferrer">
+                  WhatsApp
                 </a>
-              ))}
+              )}
             </div>
+            {socials.length > 0 && (
+              <div>
+                <p className="mono">Follow us</p>
+                {socials.map((s) => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer me">
+                    {s.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </nav>
         </div>
         <p className="footer-word" aria-hidden="true">

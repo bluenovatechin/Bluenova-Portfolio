@@ -1,3 +1,4 @@
+import { brand } from '../data/site';
 import { SectionHead, Reveal, Arrow } from '../lib';
 import { mailLink, waLink } from '../utils';
 
@@ -23,6 +24,7 @@ const sides = [
     ],
     cta: 'Join the network',
     msg: 'Hi BlueNova, I am a creator and would like to join your network. My profile: ',
+    follow: { label: 'Follow @bluenova_creatorhub', href: brand.instagramCreators },
   },
 ];
 
@@ -52,14 +54,21 @@ export default function Creators() {
                   <li key={p}>{p}</li>
                 ))}
               </ul>
-              <a
-                className="link"
-                href={waLink(s.msg) || mailLink(`${s.who}: creator network`, s.msg)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {s.cta} <Arrow />
-              </a>
+              <div className="duo-links">
+                <a
+                  className="link"
+                  href={waLink(s.msg) || mailLink(`${s.who}: creator network`, s.msg)}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {s.cta} <Arrow />
+                </a>
+                {s.follow?.href && (
+                  <a className="link" href={s.follow.href} target="_blank" rel="noreferrer">
+                    {s.follow.label} <Arrow />
+                  </a>
+                )}
+              </div>
             </Reveal>
           ))}
         </div>

@@ -5,12 +5,14 @@ export const brand = {
   name: 'BlueNova Tech',
   short: 'BlueNova',
   email: 'contact@bluenovatech.in',
-  // TODO: real WhatsApp number in international format, digits only (e.g. "919XXXXXXXXX").
-  // Buttons that need it stay hidden until it is filled in.
-  whatsapp: '',
-  // TODO: BlueNova's own Instagram / LinkedIn profile URLs.
-  instagram: '',
-  linkedin: '',
+  // Phone and WhatsApp: international format, digits only.
+  whatsapp: '917600236644',
+  phone: '+91 76002 36644',
+  instagram: 'https://www.instagram.com/bluenova_tech/',
+  // Separate account for the creator network.
+  instagramCreators: 'https://www.instagram.com/bluenova_creatorhub/',
+  facebook: 'https://www.facebook.com/profile.php?id=61575902398607',
+  linkedin: 'https://www.linkedin.com/company/bluenovatech/',
   location: 'Gujarat, India',
   timezone: 'Asia/Kolkata',
   // The address this portfolio is published at. Used for the canonical URL, sitemap,

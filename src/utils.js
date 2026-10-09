@@ -11,6 +11,8 @@ export function waLink(text) {
   return `https://wa.me/${brand.whatsapp}?text=${encodeURIComponent(text)}`;
 }
 
+export const telLink = () => `tel:+${brand.whatsapp}`;
+
 export function mailLink(subject, body = '') {
   return `mailto:${brand.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }

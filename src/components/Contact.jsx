@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { brand, services } from '../data/site';
 import { Arrow, Reveal } from '../lib';
-import { mailLink, waLink } from '../utils';
+import { mailLink, telLink, waLink } from '../utils';
 
 export default function Contact() {
   const [picked, setPicked] = useState([]);
@@ -62,9 +62,13 @@ export default function Contact() {
             {wa && (
               <a className="contact-mail" href={waLink('Hi BlueNova, I would like to discuss a project.')} target="_blank" rel="noreferrer">
                 <span className="mono">WhatsApp</span>
-                <b>Chat with us</b>
+                <b>Chat on {brand.phone}</b>
               </a>
             )}
+            <a className="contact-mail" href={telLink()}>
+              <span className="mono">Call us</span>
+              <b>{brand.phone}</b>
+            </a>
           </div>
         </div>
 

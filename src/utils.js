@@ -3,8 +3,10 @@ import { brand } from './data/site';
 export const prefersReducedMotion = () =>
   typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// Resolves a file in /public against the build's base path, so the site works at any URL.
-export const asset = (path) => `${import.meta.env.BASE_URL}${path}`;
+// Files in /public, as paths relative to the page, so the site works at any URL
+// (github.io/Bluenova-Portfolio/, a custom domain, or a sub-folder). Don't use
+// import.meta.env.BASE_URL here: the pre-render build turns it into "/", which breaks sub-folders.
+export const asset = (path) => `./${path}`;
 
 export function waLink(text) {
   if (!brand.whatsapp) return null;

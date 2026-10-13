@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import { brand } from '../data/site';
-import { BrandMark } from '../lib';
+import { asset } from '../utils';
 
+// Same order as the sections on the page.
 const links = [
-  { href: '#services', label: 'Services' },
-  { href: '#work', label: 'Work' },
+  { href: '#work', label: 'Projects' },
   { href: '#clients', label: 'Clients' },
-  { href: '#process', label: 'Process' },
+  { href: '#logos', label: 'Logos' },
+  { href: '#instagram', label: 'Instagram' },
   { href: '#faq', label: 'FAQ' },
+  { href: '#contact', label: 'Contact' },
 ];
 
 function useClock() {
@@ -29,10 +31,14 @@ function useClock() {
 export function Logo() {
   return (
     <a href="#top" className="logo" aria-label={`${brand.name} home`}>
-      <BrandMark size={26} className="logo-mark" />
-      <span>
-        Blue<b>Nova</b>
-      </span>
+      <img
+        src={asset('brand/bluenova-full-logo.png')}
+        alt={brand.name}
+        className="logo-full"
+        width="148"
+        height="42"
+        decoding="async"
+      />
     </a>
   );
 }

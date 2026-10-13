@@ -8,7 +8,7 @@ export const brand = {
   // Phone and WhatsApp: international format, digits only.
   whatsapp: '917600236644',
   phone: '+91 76002 36644',
-  instagram: 'https://www.instagram.com/bluenova_tech/',
+  instagram: 'https://www.instagram.com/bluenova_tech?utm_source=ig_web_button_share_sheet&exln=ZDNlZDc0MzIxNw==',
   // Separate account for the creator network.
   instagramCreators: 'https://www.instagram.com/bluenova_creatorhub/',
   facebook: 'https://www.facebook.com/profile.php?id=61575902398607',
@@ -106,7 +106,7 @@ export const services = [
   },
 ];
 
-// Websites designed and built by BlueNova.
+// Current projects: websites designed and built by BlueNova.
 // TODO: add `url` (the live website address) for each so visitors can open it.
 export const websites = [
   {
@@ -192,12 +192,119 @@ export const clients = [
   { name: 'Uma Farm Sweet Mosambi', handle: 'uma_farm_sweet_mosambi', logo: 'logos/uma-farm.webp', sector: 'Food & Agri', field: 'Farm-direct produce', work: ['Social', 'Reels'] },
 ];
 
-// Every brand we work with (Instagram clients + website-only clients), for the logo ticker.
+// Platforms we run for clients, and what we handle on each. Based on the services above.
+export const platforms = [
+  {
+    id: 'instagram',
+    name: 'Instagram',
+    color: '#e1306c',
+    what: 'Feeds, reels and stories planned, designed and posted every week.',
+    tasks: ['Monthly content calendar', 'Feed posts, carousels & stories', 'Reels: script, shoot & edit', 'Captions, hashtags & publishing', 'Comments & DM handling'],
+  },
+  {
+    id: 'facebook',
+    name: 'Facebook',
+    color: '#1877f2',
+    what: 'The same campaign carried to Facebook, so no audience is missed.',
+    tasks: ['Page posting alongside Instagram', 'Reels cross-posting', 'Inbox & comment handling'],
+  },
+  {
+    id: 'meta-ads',
+    name: 'Meta Ads',
+    color: '#0866ff',
+    what: 'Instagram and Facebook ads tied to calls, leads and WhatsApp chats.',
+    tasks: ['Campaign setup & targeting', 'Pixel & conversion tracking', 'Creative testing', 'Budget & ROI reporting'],
+  },
+  {
+    id: 'youtube',
+    name: 'YouTube Shorts',
+    color: '#ff0033',
+    what: 'Every reel we shoot is also cut for Shorts.',
+    tasks: ['Shorts formats of each reel', 'Titles & descriptions', 'Consistent posting'],
+  },
+  {
+    id: 'google-ads',
+    name: 'Google Ads',
+    color: '#fbbc04',
+    what: 'Search and Maps ads for people already looking for you.',
+    tasks: ['Google Search ads', 'Google Maps ads', 'Call & enquiry tracking', 'Monthly ROI reports'],
+  },
+  {
+    id: 'gbp',
+    name: 'Google Business Profile',
+    color: '#34a853',
+    what: 'Show up on Maps when people nearby search for what you do.',
+    tasks: ['Profile setup & upkeep', 'Photos, posts & offers', 'Review strategy', 'Local keyword pages'],
+  },
+  {
+    id: 'whatsapp',
+    name: 'WhatsApp Business',
+    color: '#25d366',
+    what: 'Every ad, post and page ends in a one-tap WhatsApp chat.',
+    tasks: ['Click-to-chat from ads & website', 'Enquiry flows', 'Quick replies'],
+  },
+];
+
+// Readable names for the `work` tags on clients.
+export const workLabels = {
+  Social: 'Social media management',
+  Reels: 'Reels & short video',
+  Website: 'Website',
+  Leads: 'Lead generation',
+  Branding: 'Logo & branding',
+  SEO: 'Local SEO',
+};
+
+// Every brand we work with (Instagram clients + website-only clients), with rich metadata for the B-Hive.
 export const allBrands = [
-  ...clients.map(({ name, logo }) => ({ name, logo })),
+  ...clients.map((c) => ({
+    ...c,
+    href: `https://www.instagram.com/${c.handle}`,
+    type: 'Instagram & Campaign',
+  })),
   ...websites
     .filter((w) => !clients.some((c) => c.logo === w.logo))
-    .map(({ client, logo }) => ({ name: client, logo })),
+    .map((w) => ({
+      name: w.client,
+      logo: w.logo,
+      sector: w.sector,
+      field: w.summary,
+      work: ['Website'],
+      href: w.url || w.instagram || '#work',
+      handle: w.instagram ? w.instagram.split('/').filter(Boolean).pop() : null,
+      type: 'Website & Engineering',
+    })),
+];
+
+// Official Instagram profile. Counts come from the public profile; update them now and then.
+export const instagramProfile = {
+  name: 'Bluenova Tech Pvt. Ltd.',
+  handle: 'bluenova_tech',
+  url: 'https://www.instagram.com/bluenova_tech/',
+  // Instagram's own profile widget: always shows the latest real posts, no API key needed.
+  embedUrl: 'https://www.instagram.com/bluenova_tech/embed/',
+  postsCount: 185,
+  followersCount: '442',
+  followingCount: 23,
+  creatorHubUrl: 'https://www.instagram.com/bluenova_creatorhub/',
+};
+
+// Posts shown in the Instagram section, newest first. To add one: paste its link from
+// Instagram ("Copy link") at the top of this list, then run `npm run instagram` to download
+// the image in full quality and its caption into public/instagram/ and src/data/instagram.json.
+export const instagramPosts = [
+  'https://www.instagram.com/p/DeYSTuGI-Wk/',
+  'https://www.instagram.com/p/DeUmFZWSNqB/',
+  'https://www.instagram.com/p/DeTCk5HoWdp/',
+  'https://www.instagram.com/p/DeQrJ1WIg3Y/',
+  'https://www.instagram.com/p/DeOBS6ZSGBU/',
+  'https://www.instagram.com/p/DeLb6uZIFFH/',
+  'https://www.instagram.com/reel/DeJ6m2noSJq/',
+  'https://www.instagram.com/p/DeJdoaYouEa/',
+  'https://www.instagram.com/p/DeIyovSCJl_/',
+  'https://www.instagram.com/p/DeGSQ5loR-K/',
+  'https://www.instagram.com/p/DeDwIgOIhND/',
+  'https://www.instagram.com/p/DeBGfXeicvr/',
 ];
 
 export const process = [

@@ -45,7 +45,7 @@ export default function Contact() {
       <div className="wrap contact-grid">
         <div className="contact-left">
           <p className="eyebrow">
-            <span>07</span> Contact
+            <span>06</span> Contact
           </p>
           <Reveal as="h2" className="h2 contact-title">
             Let’s make your brand <em>hard to ignore</em>.

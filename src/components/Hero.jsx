@@ -5,9 +5,19 @@ import { Arrow } from '../lib';
 const facts = [
   { value: String(allBrands.length), label: 'Brands we work with' },
   { value: String(clients.length), label: 'Instagram accounts we run' },
-  { value: String(websites.length), label: 'Websites shipped' },
+  { value: String(websites.length), label: 'Websites on the board' },
   { value: String(services.length), label: 'Services, one team' },
 ];
+
+const index = [
+  { href: '#work', n: '01', label: 'Current projects' },
+  { href: '#clients', n: '02', label: 'Digital marketing clients' },
+  { href: '#logos', n: '03', label: 'Logo design' },
+  { href: '#instagram', n: '04', label: 'Instagram' },
+  { href: '#faq', n: '05', label: 'FAQ' },
+];
+
+const ringText = 'BlueNova Tech · Portfolio 2026 · Scroll · ';
 
 export default function Hero() {
   return (
@@ -16,31 +26,51 @@ export default function Hero() {
       <div className="hero-fade" />
       <div className="wrap hero-inner">
         <p className="eyebrow hero-eyebrow">
-          <span>BlueNova Tech</span> Digital studio · Modasa · Ahmedabad
+          <span>Portfolio · 2026</span> BlueNova Tech · Modasa · Ahmedabad
         </p>
         <h1 className="h1">
           <span className="line"><span>Brands people</span></span>
           <span className="line">
             <span>
-              <em>stop</em> scrolling for.
+              <em className="shimmer">stop</em> scrolling for.
             </span>
           </span>
         </h1>
         <p className="hero-sub">
-          A digital marketing and website development agency in Gujarat. We run social media, shoot reels,
-          build websites and manage ads for hospitals, manufacturers, retailers and food brands. One team takes
-          care of all of it.
+          The work of a digital studio in Gujarat: websites, reels, Instagram and identity for hospitals,
+          manufacturers, retailers and food brands.
         </p>
         <div className="hero-ctas">
-          <a href="#contact" className="btn">
-            Start a project <Arrow />
+          <a href="#work" className="btn">
+            View the work <Arrow />
           </a>
-          <a href="#work" className="btn btn-ghost">
-            See our work
+          <a href="#contact" className="btn btn-ghost">
+            Start a project
           </a>
         </div>
-        <p className="hero-hint mono">Click the field to set off a nova</p>
+
+        <nav className="hero-index" aria-label="Portfolio sections">
+          {index.map((s) => (
+            <a key={s.href} href={s.href}>
+              <span className="mono">{s.n}</span> {s.label}
+            </a>
+          ))}
+        </nav>
       </div>
+
+      <a href="#work" className="hero-badge" aria-label="Scroll to the work">
+        <svg viewBox="0 0 200 200" aria-hidden="true">
+          <defs>
+            <path id="hero-ring-path" d="M100 100 m-78 0 a78 78 0 1 1 156 0 a78 78 0 1 1 -156 0" />
+          </defs>
+          <text>
+            <textPath href="#hero-ring-path" textLength="486" lengthAdjust="spacing">
+              {ringText}
+            </textPath>
+          </text>
+        </svg>
+        <span className="hero-badge-arrow">↓</span>
+      </a>
 
       <div className="wrap">
         <dl className="facts">

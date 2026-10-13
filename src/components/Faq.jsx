@@ -5,7 +5,7 @@ export default function Faq() {
   return (
     <section className="section" id="faq">
       <div className="wrap faq-grid">
-        <SectionHead index="06" label="FAQ" title={<>Good <em>questions</em>.</>} />
+        <SectionHead index="05" label="FAQ" title={<>Good <em>questions</em>.</>} />
         <div className="faq-list">
           {faqs.map((f, i) => (
             <details key={f.q} className="faq" open={i === 0}>

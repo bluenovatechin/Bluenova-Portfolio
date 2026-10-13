@@ -27,10 +27,11 @@ export default function Footer() {
           <nav className="footer-cols" aria-label="Footer">
             <div>
               <p className="mono">Studio</p>
-              <a href="#services">Services</a>
-              <a href="#work">Work</a>
-              <a href="#clients">Clients</a>
-              <a href="#process">Process</a>
+              <a href="#work">Current projects</a>
+              <a href="#clients">Digital marketing clients</a>
+              <a href="#logos">Logo design</a>
+              <a href="#instagram">Instagram</a>
+              <a href="#faq">FAQ</a>
               <a href={brand.mainSite}>Main website</a>
             </div>
             <div>

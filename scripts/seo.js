@@ -1,6 +1,9 @@
 // Builds everything search engines and AI tools read about the site, from src/data/site.js:
 // <head> tags, JSON-LD structured data, sitemap.xml, robots.txt and llms.txt.
-import { allBrands, areas, brand, clients, faqs, seo, services, websites } from '../src/data/site.js';
+import { readFileSync } from 'node:fs';
+import { allBrands, areas, brand, clients, faqs, platforms, seo, services, websites } from '../src/data/site.js';
+
+const igPosts = JSON.parse(readFileSync(new URL('../src/data/instagram.json', import.meta.url), 'utf8'));
 
 const url = (path = '') => new URL(path, brand.siteUrl).href;
 const esc = (s) =>
@@ -150,6 +153,8 @@ export function sitemap() {
   const images = [
     { loc: url('og-image.jpg'), title: `${brand.name}: digital marketing and website development` },
     ...websites.map((w) => ({ loc: url(w.image), title: `${w.client} website by ${brand.name}` })),
+    ...clients.map((c) => ({ loc: url(c.logo), title: `${c.name} logo, social media managed by ${brand.name}` })),
+    ...igPosts.map((p) => ({ loc: url(p.image), title: p.caption.split('\n').find((l) => l.trim()) ?? `Instagram post by ${brand.name}` })),
   ];
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -187,6 +192,9 @@ ${brand.name} (also "${brand.short}") is a digital marketing and website develop
 
 ## Services
 ${services.map((s) => `- ${s.title}: ${s.line} (${s.deliverables.join(', ')})`).join('\n')}
+
+## Platforms ${brand.name} manages for clients
+${platforms.map((p) => `- ${p.name}: ${p.what} (${p.tasks.join(', ')})`).join('\n')}
 
 ## Websites built by ${brand.name}
 ${websites.map((w) => `- ${w.client} (${w.sector}, ${w.city}): ${w.summary}${w.url ? ` ${w.url}` : ''}`).join('\n')}

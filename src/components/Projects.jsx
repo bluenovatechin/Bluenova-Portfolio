@@ -40,15 +40,25 @@ export default function Projects() {
         setActive(idx);
       }
     };
+    let visible = false;
+    const io = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) update();
+    });
+    io.observe(section);
+
     const onScroll = () => {
+      if (!visible || prefersReducedMotion()) return;
+      if (window.innerWidth < 900) return;
       if (!raf) raf = requestAnimationFrame(update);
     };
-    update();
+
     if (prefersReducedMotion()) return undefined;
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     return () => {
       cancelAnimationFrame(raf);
+      io.disconnect();
       window.removeEventListener('scroll', onScroll);
       window.removeEventListener('resize', onScroll);
     };

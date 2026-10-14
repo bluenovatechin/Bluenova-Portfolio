@@ -72,18 +72,21 @@ export default function Instagram() {
       </div>
 
       <div className="ig-wall">
-        {COLUMNS.map((offset, ci) => (
-          <div key={offset} className={`ig-col ig-col-${ci}`} aria-hidden="true">
-            <div className="ig-col-track">
-              {[...column(offset), ...column(offset)].map((post, i) => (
-                <button key={`${post.code}-${i}`} type="button" tabIndex={-1} className="ig-tile" onClick={() => setOpen(post)}>
-                  <img src={asset(post.thumb)} alt="" width="480" height="640" loading="lazy" decoding="async" />
-                  {post.type === 'Reel' && <ReelIcon />}
-                </button>
-              ))}
+        {COLUMNS.map((offset, ci) => {
+          const items = column(offset).slice(0, 5);
+          return (
+            <div key={offset} className={`ig-col ig-col-${ci}`} aria-hidden="true">
+              <div className="ig-col-track">
+                {[...items, ...items].map((post, i) => (
+                  <button key={`${post.code}-${i}`} type="button" tabIndex={-1} className="ig-tile" onClick={() => setOpen(post)}>
+                    <img src={asset(post.thumb)} alt="" width="480" height="640" loading="lazy" decoding="async" />
+                    {post.type === 'Reel' && <ReelIcon />}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="ig-phone-stage">
           <div className="ig-phone">

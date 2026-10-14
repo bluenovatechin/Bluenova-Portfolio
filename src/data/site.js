@@ -164,32 +164,22 @@ export const websites = [
     url: '',
     instagram: '',
   },
-  {
-    client: 'Vedant Hospital',
-    sector: 'Healthcare',
-    city: 'Modasa',
-    summary: 'Doctors, laboratory and services in one place, with the 24×7 helpline and WhatsApp number on every page.',
-    scope: ['Design', 'Development', 'WhatsApp enquiries'],
-    logo: 'logos/vedant-hospital.webp',
-    image: 'work/vedant-hospital.webp',
-    url: '',
-    instagram: 'https://www.instagram.com/vedanthospital_modasa',
-  },
+
 ];
 
 // Instagram accounts BlueNova manages.
 export const clients = [
-  { name: 'Nyon Ceramica', handle: 'nyon.ceramica', logo: 'logos/nyon-ceramica.webp', sector: 'Industrial', field: 'Luxury tiles & surfaces', work: ['Social', 'Reels'] },
-  { name: 'Pulse Hospital & ICU', handle: 'pulse_hospital_icu', logo: 'logos/pulse-hospital.webp', sector: 'Healthcare', field: 'Emergency & ICU care', work: ['Social', 'Reels', 'Website'] },
-  { name: 'Krupa Elevators', handle: 'krupa_elevators_', logo: 'logos/krupa-elevators.webp', sector: 'Industrial', field: 'Elevators & escalators', work: ['Social', 'Website', 'Leads'] },
-  { name: 'Prime Hospital', handle: 'primehospital.9', logo: 'logos/prime-hospital.webp', sector: 'Healthcare', field: 'Multispecialty hospital', work: ['Social', 'Branding'] },
-  { name: 'Vedant Hospital', handle: 'vedanthospital_modasa', logo: 'logos/vedant-hospital.webp', sector: 'Healthcare', field: 'Super-specialty hospital', work: ['Social', 'Website', 'SEO'] },
-  { name: 'Deep Hospital', handle: 'deephospital_modasa', logo: 'logos/deep-hospital.webp', sector: 'Healthcare', field: 'Clinical care', work: ['Social', 'Reels'] },
-  { name: 'Radhe Homoeopathy', handle: 'radhehomoeopathy', logo: 'logos/radhe-homoeopathy.webp', sector: 'Healthcare', field: 'Homoeopathic clinic', work: ['Social', 'Reels'] },
-  { name: 'Avishkaar Infratech', handle: 'avishkaar_infratech', logo: 'logos/avishkaar-infratech.webp', sector: 'Industrial', field: 'Civil infrastructure', work: ['Social', 'Reels'] },
-  { name: 'Aai Khodiyar Dhaba', handle: 'aai_khodiyardhaba', logo: 'logos/aai-khodiyar-dhaba.webp', sector: 'Food & Agri', field: 'Restaurant', work: ['Reels', 'Social'] },
-  { name: 'Green Basket', handle: 'greenbasket.1', logo: 'logos/green-basket.webp', sector: 'Food & Agri', field: 'Organic produce', work: ['Social', 'Reels'] },
-  { name: 'Uma Farm Sweet Mosambi', handle: 'uma_farm_sweet_mosambi', logo: 'logos/uma-farm.webp', sector: 'Food & Agri', field: 'Farm-direct produce', work: ['Social', 'Reels'] },
+  { name: 'Nyon Ceramica', handle: 'nyon.ceramica', logo: 'logos/nyon-ceramica.webp', sector: 'Industrial', field: 'Luxury tiles & surfaces', work: ['Social', 'Reels'], palette: ['#485cff', '#8affec', '#d7fef7'] },
+  { name: 'Pulse Hospital & ICU', handle: 'pulse_hospital_icu', logo: 'logos/pulse-hospital.webp', sector: 'Healthcare', field: 'Emergency & ICU care', work: ['Social', 'Reels', 'Website'], palette: ['#699a9e', '#e5f8fa', '#d3cf93'] },
+  { name: 'Krupa Elevators', handle: 'krupa_elevators_', logo: 'logos/krupa-elevators.webp', sector: 'Industrial', field: 'Elevators & escalators', work: ['Social', 'Website', 'Leads'], palette: ['#ea5b07', '#f8cbac', '#ec9457'] },
+  { name: 'Prime Hospital', handle: 'primehospital.9', logo: 'logos/prime-hospital.webp', sector: 'Healthcare', field: 'Multispecialty hospital', work: ['Social', 'Branding'], palette: ['#d98d24', '#fef9e4', '#b7fbfb'] },
+  { name: 'Vedant Hospital', handle: 'vedanthospital_modasa', logo: 'logos/vedant-hospital.webp', sector: 'Healthcare', field: 'Super-specialty hospital', work: ['Social', 'Website', 'SEO'], palette: ['#ec7a05', '#f9e4f9', '#adfff6'] },
+  { name: 'Deep Hospital', handle: 'deephospital_modasa', logo: 'logos/deep-hospital.webp', sector: 'Healthcare', field: 'Clinical care', work: ['Social', 'Reels'], palette: ['#cd583a', '#fefbd5', '#c8fdfe'] },
+  { name: 'Radhe Homoeopathy', handle: 'radhehomoeopathy', logo: 'logos/radhe-homoeopathy.webp', sector: 'Healthcare', field: 'Homoeopathic clinic', work: ['Social', 'Reels'], palette: ['#cb1ab5', '#e7e6e8', '#7a7b7a'] },
+  { name: 'Avishkaar Infratech', handle: 'avishkaar_infratech', logo: 'logos/avishkaar-infratech.webp', sector: 'Industrial', field: 'Civil infrastructure', work: ['Social', 'Reels'], palette: ['#454444', '#e5e6e5', '#a2fcfc'] },
+  { name: 'Aai Khodiyar Dhaba', handle: 'aai_khodiyardhaba', logo: 'logos/aai-khodiyar-dhaba.webp', sector: 'Food & Agri', field: 'Restaurant', work: ['Reels', 'Social'], palette: ['#d4a647', '#d6fdfd', '#a988fd'] },
+  { name: 'Green Basket', handle: 'greenbasket.1', logo: 'logos/green-basket.webp', sector: 'Food & Agri', field: 'Organic produce', work: ['Social', 'Reels'], palette: ['#67f3fd', '#d5fbfd', '#bdd8c4'] },
+  { name: 'Uma Farm Sweet Mosambi', handle: 'uma_farm_sweet_mosambi', logo: 'logos/uma-farm.webp', sector: 'Food & Agri', field: 'Farm-direct produce', work: ['Social', 'Reels'], palette: ['#aa96dc', '#dcdcc7', '#a9ab97'] },
 ];
 
 // Platforms we run for clients, and what we handle on each. Based on the services above.

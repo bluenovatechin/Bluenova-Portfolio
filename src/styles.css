@@ -443,7 +443,6 @@ button:hover > .arrow,
   color: var(--muted);
   font-size: clamp(1.02rem, 1.4vw, 1.18rem);
   margin: 28px 0 34px;
-  animation: drift 0.9s 0.1s var(--ease) both;
 }
 .hero-ctas {
   display: flex;
@@ -1231,66 +1230,45 @@ button:hover > .arrow,
 }
 .ambient-aurora i {
   position: absolute;
-  width: 62vmax;
-  height: 62vmax;
+  width: 60vmax;
+  height: 60vmax;
   border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.28;
-  will-change: transform;
+  pointer-events: none;
+  opacity: 0.22;
 }
 .ambient-aurora i:nth-child(1) {
-  background: radial-gradient(circle, #1a3fcf, transparent 65%);
+  background: radial-gradient(circle, rgba(26, 63, 207, 0.45) 0%, rgba(26, 63, 207, 0.18) 35%, transparent 70%);
   left: -18vmax;
   top: -10vmax;
-  animation: aurora-a 26s ease-in-out infinite alternate;
+  animation: aurora-a 32s ease-in-out infinite alternate;
 }
 .ambient-aurora i:nth-child(2) {
-  background: radial-gradient(circle, #0a96e6, transparent 65%);
+  background: radial-gradient(circle, rgba(10, 150, 230, 0.35) 0%, rgba(10, 150, 230, 0.12) 35%, transparent 70%);
   right: -22vmax;
   top: 30vh;
-  animation: aurora-b 32s ease-in-out infinite alternate;
+  animation: aurora-b 38s ease-in-out infinite alternate;
 }
 .ambient-aurora i:nth-child(3) {
-  background: radial-gradient(circle, #5b2bd9, transparent 65%);
+  background: radial-gradient(circle, rgba(91, 43, 217, 0.3) 0%, rgba(91, 43, 217, 0.1) 35%, transparent 70%);
   left: 20vw;
   bottom: -30vmax;
-  opacity: 0.18;
-  animation: aurora-c 38s ease-in-out infinite alternate;
+  opacity: 0.14;
+  animation: aurora-c 44s ease-in-out infinite alternate;
 }
 @keyframes aurora-a {
   to {
-    transform: translate(28vw, 34vh) scale(1.25);
+    transform: translate(24vw, 28vh) scale(1.15);
   }
 }
 @keyframes aurora-b {
   to {
-    transform: translate(-36vw, -22vh) scale(0.85);
+    transform: translate(-28vw, -18vh) scale(0.9);
   }
 }
 @keyframes aurora-c {
   to {
-    transform: translate(-18vw, -40vh) scale(1.3);
+    transform: translate(-14vw, -30vh) scale(1.2);
   }
-}
-.ambient-cursor {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(40vmax circle at var(--mx, 50%) var(--my, 30%), rgba(40, 130, 255, 0.11), transparent 60%);
-}
-.ambient-grain {
-  position: absolute;
-  inset: -50%;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 1.2s steps(6) infinite;
-}
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-4%, 3%); }
-  40% { transform: translate(3%, -5%); }
-  60% { transform: translate(-6%, -2%); }
-  80% { transform: translate(5%, 4%); }
-  100% { transform: translate(0, 0); }
 }
 .scroll-progress {
   position: fixed;
@@ -1301,7 +1279,7 @@ button:hover > .arrow,
   background: var(--grad);
   box-shadow: 0 0 12px rgba(10, 150, 230, 0.8);
   transform-origin: left;
-  transform: scaleX(var(--scroll, 0));
+  transform: scaleX(0);
 }
 
 /* ───────────── Hero extras ───────────── */

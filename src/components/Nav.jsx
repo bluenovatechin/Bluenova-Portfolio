@@ -32,7 +32,7 @@ export function Logo() {
   return (
     <a href="#top" className="logo" aria-label={`${brand.name} home`}>
       <img
-        src={asset('brand/bluenova-full-logo.png')}
+        src={asset('brand/bluenova-full-logo.webp')}
         alt={brand.name}
         className="logo-full"
         width="148"
@@ -49,10 +49,20 @@ export default function Nav() {
   const time = useClock();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let raf = 0;
+    const checkScroll = () => {
+      raf = 0;
+      setScrolled(window.scrollY > 24);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(checkScroll);
+    };
+    checkScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+    };
   }, []);
 
   useEffect(() => {

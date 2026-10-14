@@ -1,25 +1,25 @@
 import { useEffect, useRef } from 'react';
 import { MARK_B, MARK_HEX, prefersReducedMotion } from '../utils';
 
-// Hexagonal "pointy-top" distance: matches the shape of the BlueNova mark,
-// so shockwaves ripple outward as hexagons.
+// Hexagonal "pointy-top" distance: matches the shape of the BlueNova mark
 const hexDist = (dx, dy) => {
   const ax = Math.abs(dx);
   const k = Math.abs(dy) * 0.866;
   return Math.max(ax, ax * 0.5 + k);
 };
 
-// A hex lattice of dots. Hexagonal shockwaves ("novas") pulse out of the BlueNova mark
-// at intervals, the pointer lights up nearby dots, and clicking fires an extra nova.
+// A clean hex lattice of dots with occasional gentle pulses.
+// Optimized for zero main-thread blocking and smooth 60fps rendering.
 export default function NovaField() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const reduced = prefersReducedMotion();
-    let GAP = 26;
-    const SPEED = 0.36; // px per ms
+    let GAP = 38;
+    const SPEED = 0.38; // px per ms
     const BAND = 64;
     const hexPath = new Path2D(MARK_HEX);
     const bPaths = MARK_B.map((d) => new Path2D(d));
@@ -29,36 +29,33 @@ export default function NovaField() {
     let dots = [];
     let core = { x: 0, y: 0, size: 90 };
     let waves = [];
-    let pointer = { x: -9999, y: -9999, active: false };
     let raf = 0;
-    let lastAuto = -9999;
+    let lastAuto = 0;
     let visible = true;
+    let isMobile = false;
 
     // Dots are drawn in brightness buckets so the colour only changes LEVELS times per frame.
-    const LEVELS = 10;
+    const LEVELS = 8;
     const styles = Array.from({ length: LEVELS }, (_, i) => {
       const a = (0.08 + (i / (LEVELS - 1)) * 0.85).toFixed(3);
-      return i >= 4 ? `rgba(90,178,255,${a})` : `rgba(200,214,240,${a})`;
+      return i >= 3 ? `rgba(90,178,255,${a})` : `rgba(200,214,240,${a})`;
     });
     const buckets = Array.from({ length: LEVELS }, () => []);
     let sprite = null;
-    let frameGap = 0;
-    let lastFrame = 0;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const mobile = rect.width < 760;
-      const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 2);
+      isMobile = rect.width < 760;
+      const dpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.25 : 1.75);
       w = rect.width;
       h = rect.height;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
+      canvas.width = Math.round(w * dpr);
+      canvas.height = Math.round(h * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      frameGap = mobile ? 1000 / 30 : 0;
-      GAP = mobile ? 30 : 26;
-      core = mobile
-        ? { x: w * 0.82, y: 104, size: 50 } // sits in the space between the nav and the eyebrow
-        : { x: w * 0.75, y: h * 0.42, size: Math.min(110, w * 0.075) };
+      GAP = isMobile ? 46 : 38;
+      core = isMobile
+        ? { x: w * 0.82, y: 104, size: 48 }
+        : { x: w * 0.75, y: h * 0.42, size: Math.min(108, w * 0.075) };
       dots = [];
       const rowH = GAP * 0.866;
       for (let r = 0, y = rowH / 2; y <= h; r++, y += rowH) {
@@ -67,11 +64,11 @@ export default function NovaField() {
         }
       }
       sprite = renderSprite(dpr);
+      draw(0);
     };
 
-    // The glow and logo never change shape, so draw them once into an offscreen canvas.
     const renderSprite = (dpr) => {
-      const halo = core.size * 1.9;
+      const halo = core.size * 1.85;
       const off = document.createElement('canvas');
       off.width = off.height = Math.ceil(halo * 2 * dpr);
       const o = off.getContext('2d');
@@ -122,11 +119,6 @@ export default function NovaField() {
           }
         }
 
-        if (pointer.active) {
-          const pd = Math.hypot(p.x - pointer.x, p.y - pointer.y);
-          if (pd < 160) glow += (1 - pd / 160) ** 2 * 0.8;
-        }
-
         const level = Math.round(Math.min(glow, 1) * (LEVELS - 1));
         buckets[level].push(p.x + dx, p.y + dy);
       }
@@ -134,90 +126,80 @@ export default function NovaField() {
       for (let i = 0; i < LEVELS; i++) {
         const b = buckets[i];
         if (!b.length) continue;
-        const size = 1 + (i / (LEVELS - 1)) * 1.7;
+        const size = 1 + (i / (LEVELS - 1)) * 1.6;
         const half = size / 2;
         ctx.fillStyle = styles[i];
         for (let j = 0; j < b.length; j += 2) ctx.fillRect(b[j] - half, b[j + 1] - half, size, size);
       }
 
-      const pulse = reduced ? 1 : 1 + Math.sin(t / 650) * 0.04;
-      const size = sprite.halo * 2 * pulse;
-      ctx.drawImage(sprite.canvas, core.x - size / 2, core.y - size / 2, size, size);
+      if (sprite) {
+        const size = sprite.halo * 2;
+        ctx.drawImage(sprite.canvas, core.x - size / 2, core.y - size / 2, size, size);
+      }
     };
 
     const loop = (t) => {
-      raf = visible ? requestAnimationFrame(loop) : 0;
-      if (t - lastFrame < frameGap) return;
-      lastFrame = t;
-      if (t - lastAuto > 3400) {
+      if (!visible) {
+        raf = 0;
+        return;
+      }
+
+      // Check if time to trigger a new wave
+      if (t - lastAuto > 5000) {
         fire(core.x, core.y, t);
         lastAuto = t;
       }
+
       draw(t);
+
+      // Only schedule next frame if waves are active or about to fire
+      if (waves.length > 0) {
+        raf = requestAnimationFrame(loop);
+      } else {
+        raf = 0;
+      }
     };
 
-    const local = (e) => {
-      const rect = canvas.getBoundingClientRect();
-      return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-    };
-    const onMove = (e) => (pointer = { ...local(e), active: true });
-    const onLeave = () => (pointer.active = false);
-    const onDown = (e) => {
-      const p = local(e);
-      fire(p.x, p.y, performance.now());
+    const triggerWave = () => {
+      if (!visible || reduced || isMobile) return;
+      const now = performance.now();
+      fire(core.x, core.y, now);
+      lastAuto = now;
+      if (!raf) raf = requestAnimationFrame(loop);
     };
 
-    const redraw = () => draw(0);
-    resize();
-    window.addEventListener('resize', resize);
-
-    if (reduced) {
-      redraw();
-      window.addEventListener('resize', redraw);
-      return () => {
-        window.removeEventListener('resize', resize);
-        window.removeEventListener('resize', redraw);
-      };
-    }
-
-    const host = canvas.parentElement;
-    host.addEventListener('pointermove', onMove);
-    host.addEventListener('pointerleave', onLeave);
-    host.addEventListener('pointerdown', onDown);
-
-    // Draw one still frame now, start animating once the page has finished loading,
-    // and pause whenever the hero is off-screen.
-    let started = false;
-    redraw();
-    // Start on the first interaction, or a moment after the page settles, whichever comes first.
-    const kick = ['pointerdown', 'pointermove', 'touchstart', 'scroll', 'keydown'];
-    const start = () => {
-      if (started) return;
-      started = true;
-      kick.forEach((ev) => window.removeEventListener(ev, start));
-      if (visible && !raf) raf = requestAnimationFrame(loop);
+    let interval = null;
+    const init = () => {
+      resize();
+      window.addEventListener('resize', resize);
+      if (!reduced && !isMobile) {
+        interval = setInterval(triggerWave, 6000);
+      }
     };
-    kick.forEach((ev) => window.addEventListener(ev, start, { once: true, passive: true }));
-    const delayed = () => window.setTimeout(start, 2500);
+
     const idle = window.requestIdleCallback
-      ? window.requestIdleCallback(delayed, { timeout: 2000 })
-      : window.setTimeout(delayed, 800);
+      ? window.requestIdleCallback(init, { timeout: 1200 })
+      : setTimeout(init, 150);
+
     const io = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
-      if (visible && started && !raf) raf = requestAnimationFrame(loop);
+      if (!visible && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
     });
     io.observe(canvas);
 
     return () => {
-      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
-      else window.clearTimeout(idle);
-      kick.forEach((ev) => window.removeEventListener(ev, start));
-      cancelAnimationFrame(raf);
+      if (window.cancelIdleCallback && typeof idle === 'number') {
+        window.cancelIdleCallback(idle);
+      } else {
+        clearTimeout(idle);
+      }
+      if (interval) clearInterval(interval);
+      if (raf) cancelAnimationFrame(raf);
       io.disconnect();
       window.removeEventListener('resize', resize);
-      host.removeEventListener('pointermove', onMove);
-      host.removeEventListener('pointerleave', onLeave);
-      host.removeEventListener('pointerdown', onDown);
     };
   }, []);
 

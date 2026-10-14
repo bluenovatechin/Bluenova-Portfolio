@@ -1,41 +1,34 @@
-import { useEffect } from 'react';
-import { prefersReducedMotion } from '../utils';
+import { useEffect, useRef } from 'react';
 
-// Page-wide backdrop: drifting aurora blobs, film grain, a glow that
-// follows the cursor, and a scroll progress bar. All decorative.
+// Page-wide backdrop: subtle aurora gradient background and a smooth scroll progress bar.
 export default function Ambient() {
+  const barRef = useRef(null);
+
   useEffect(() => {
     let raf = 0;
-    let mx = 50;
-    let my = 30;
+    const bar = barRef.current;
 
-    const paint = () => {
+    const updateScroll = () => {
       raf = 0;
-      // set on <html> so the progress bar (outside this layer) can read them too
+      if (!bar) return;
       const doc = document.documentElement;
       const max = doc.scrollHeight - window.innerHeight;
-      doc.style.setProperty('--scroll', max > 0 ? (window.scrollY / max).toFixed(4) : '0');
-      doc.style.setProperty('--mx', `${mx}%`);
-      doc.style.setProperty('--my', `${my}%`);
-    };
-    const queue = () => {
-      if (!raf) raf = requestAnimationFrame(paint);
-    };
-    const onMove = (e) => {
-      mx = (e.clientX / window.innerWidth) * 100;
-      my = (e.clientY / window.innerHeight) * 100;
-      queue();
+      const p = max > 0 ? (window.scrollY / max).toFixed(4) : '0';
+      bar.style.transform = `scaleX(${p})`;
     };
 
-    paint();
-    window.addEventListener('scroll', queue, { passive: true });
-    window.addEventListener('resize', queue);
-    if (!prefersReducedMotion()) window.addEventListener('pointermove', onMove, { passive: true });
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(updateScroll);
+    };
+
+    raf = requestAnimationFrame(updateScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+
     return () => {
       cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', queue);
-      window.removeEventListener('resize', queue);
-      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
     };
   }, []);
 
@@ -47,10 +40,8 @@ export default function Ambient() {
           <i />
           <i />
         </div>
-        <div className="ambient-cursor" />
-        <div className="ambient-grain" />
       </div>
-      <div className="scroll-progress" aria-hidden="true" />
+      <div ref={barRef} className="scroll-progress" aria-hidden="true" />
     </>
   );
 }

@@ -9,17 +9,27 @@ export default function WhatsAppButton() {
   useEffect(() => {
     const contact = document.getElementById('contact');
     let contactVisible = false;
+    let raf = 0;
     const update = () => setShow(window.scrollY > window.innerHeight * 0.8 && !contactVisible);
+    const onScroll = () => {
+      if (!raf) {
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          update();
+        });
+      }
+    };
     const io = new IntersectionObserver(([entry]) => {
       contactVisible = entry.isIntersecting;
       update();
     });
     if (contact) io.observe(contact);
-    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('scroll', onScroll, { passive: true });
     update();
     return () => {
+      cancelAnimationFrame(raf);
       io.disconnect();
-      window.removeEventListener('scroll', update);
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 

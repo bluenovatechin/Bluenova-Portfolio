@@ -5,69 +5,26 @@ import { asset, prefersReducedMotion } from '../utils';
 
 const CYCLE = 4200;
 
-// Pull the main colours out of a logo: sample its pixels, skip the white background,
-// bucket similar colours and keep the most common distinct ones.
-function extractPalette(img, count = 4) {
-  const size = 64;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = size;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  ctx.drawImage(img, 0, 0, size, size);
-  const { data } = ctx.getImageData(0, 0, size, size);
-  const buckets = new Map();
-  for (let i = 0; i < data.length; i += 4) {
-    const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
-    if (a < 200 || (r > 232 && g > 232 && b > 232)) continue;
-    const key = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
-    const e = buckets.get(key) ?? { n: 0, r: 0, g: 0, b: 0 };
-    e.n++;
-    e.r += r;
-    e.g += g;
-    e.b += b;
-    buckets.set(key, e);
-  }
-  const picked = [];
-  for (const e of [...buckets.values()].sort((x, y) => y.n - x.n)) {
-    const c = [e.r / e.n, e.g / e.n, e.b / e.n].map(Math.round);
-    if (picked.every((p) => Math.hypot(p[0] - c[0], p[1] - c[1], p[2] - c[2]) > 60)) picked.push(c);
-    if (picked.length === count) break;
-  }
-  return picked.map((c) => `#${c.map((v) => v.toString(16).padStart(2, '0')).join('')}`);
-}
-
 export default function LogoLab() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [palette, setPalette] = useState([]);
   const sectionRef = useRef(null);
   const c = clients[active];
+  const palette = c.palette || ['#1d64dc', '#5fb4ff', '#0a96e6'];
+  const main = palette[0] ?? '#1d64dc';
 
   // auto-advance while the section is on screen, until someone picks a logo
   useEffect(() => {
     if (paused || prefersReducedMotion()) return undefined;
     let visible = false;
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
-    io.observe(sectionRef.current);
+    if (sectionRef.current) io.observe(sectionRef.current);
     const id = setInterval(() => visible && setActive((i) => (i + 1) % clients.length), CYCLE);
     return () => {
       clearInterval(id);
       io.disconnect();
     };
   }, [paused]);
-
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      try {
-        setPalette(extractPalette(img));
-      } catch {
-        setPalette([]);
-      }
-    };
-    img.src = asset(c.logo);
-  }, [c.logo]);
-
-  const main = palette[0] ?? '#1d64dc';
 
   return (
     <section
